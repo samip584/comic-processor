@@ -1,0 +1,186 @@
+# ========================================
+# SENSITIVE & ENVIRONMENT
+# ========================================
+# Contains API keys - NEVER commit this
+.env
+
+# Keep example for reference
+!.env.example
+
+
+# ========================================
+# PYTHON
+# ========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+
+# ========================================
+# VIRTUAL ENVIRONMENTS
+# ========================================
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+
+# ========================================
+# IDE & EDITORS
+# ========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+
+# ========================================
+# OPERATING SYSTEM
+# ========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+
+# ========================================
+# PROJECT OUTPUT (Auto-generated)
+# ========================================
+# Comic processing results - regenerated on each run
+results/
+
+# Analysis cache - auto-created by processor
+cache/
+*/cache/
+
+# Debug output - auto-created during panel extraction
+debug_panels/
+
+# Test/backup directories
+comic_pages copy/
+
+
+# ========================================
+# LARGE DEPENDENCIES (Auto-installed)
+# ========================================
+# IndexTTS repository - installed via setup script
+# Contains models (~8GB) in index-tts/checkpoints/
+index-tts/
+index-tts
+index-tts/*
+
+checkpoints
+comic_pages/*
+
+# HuggingFace cache
+.cache/
+hf_cache/
+huggingface/
+
+
+# ========================================
+# USER CONTENT (Optional tracking)
+# ========================================
+# Comic pages - user's input images
+# Uncomment if you don't want to track your comics:
+# comic_pages/
+
+# Voice samples - user's reference audio
+# Keep personal voice samples for IndexTTS2 voice cloning
+# Uncomment if you don't want to track your voice samples:
+# voice_samples/
+
+
+# ========================================
+# TEMPORARY FILES
+# ========================================
+*.tmp
+*.log
+*.bak
+*.swp
+temp_*.m4a
+temp_*.wav
+temp_*.mp4
+
+# Temporary audio/video files
+temp_audio.*
+temp_video.*
+
+# PyTorch checkpoints during training
+*.pth.tar
+lightning_logs/
+
+
+# ========================================
+# AUDIO/VIDEO WORK FILES
+# ========================================
+# Large media files that shouldn't be in git
+*.wav
+*.mp3
+*.m4a
+*.mp4
+*.avi
+*.mov
+
+# Allow specific voice samples directory structure
+!voice_samples/.gitkeep
+!voice_samples/README.md
+
+voice_samples/*
+
+# Allow example files if any
+!**/example.wav
+!**/sample.wav
+
+
+# ========================================
+# JUPYTER & NOTEBOOKS
+# ========================================
+.ipynb_checkpoints/
+*.ipynb
+
+
+# ========================================
+# TESTING & COVERAGE
+# ========================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/

@@ -1,0 +1,31 @@
+# Core AI and Processing
+google-genai>=0.3.0
+protobuf>=4.21.0,<6.0
+ollama>=0.1.0
+python-dotenv>=1.0.0
+
+# Image Processing (Required for both modes)
+opencv-python>=4.8.0
+Pillow>=10.0.0
+numpy>=1.21.0
+scikit-learn>=1.0.0
+
+# Text-to-Speech - IndexTTS2 (Breakthrough Zero-Shot TTS)
+# Note: IndexTTS2 must be installed separately from GitHub
+# See INDEXTTS_SETUP.md for detailed installation instructions
+torch>=2.0.0
+torchaudio>=2.0.0
+transformers>=4.33.0
+soundfile>=0.12.0
+librosa>=0.10.0
+scipy>=1.9.0
+omegaconf>=2.3.0
+huggingface-hub>=0.19.0
+safetensors>=0.4.0
+# For Chinese text processing (optional - requires OpenFST)
+# WeTextProcessing
+# For phonemization
+phonemizer>=3.2.0
+
+# Audio Processing (Required for both modes)
+pygame>=2.5.0
