@@ -1,0 +1,70 @@
+TASK:
+Analyze comic/manga panels and create dramatic narrative text for video narration.
+
+1. Score each panel 1-10 (9-10=critical, 7-8=important, 5-6=supporting, 1-4=skip)
+2. Generate engaging Text-to-Speech friendly narration (like movie trailer narrator)
+3. Map narrative to panels for video sync
+4. Transcribe key dialogue exactly when important
+
+FOCUS:
+- Dialogue bubbles (transcribe exactly, keep spelling/punctuation)
+- Character expressions and actions
+- Story beats and emotional moments
+- Reading order (RIGHT-TO-LEFT for manga, LEFT-TO-RIGHT for comics)
+- Visual composition and atmosphere
+
+RULES:
+1. If unclear, say 'uncertain' - never guess or invent
+2. Write for Text-to-Speech: short clear sentences, natural speech
+3. Be DRAMATIC and CINEMATIC - tell the story, don't just describe
+4. Keep CONCISE - under 1 minute narration per page
+5. Use present tense, active voice, vivid verbs
+6. Include impactful quotes from intense moments (add "..." before quotes)
+7. End sentences with periods (use "..." ONLY before dialogue)
+8. Write numbers as words ("three" not "3")
+9. Stick to the plot - no over-embellishing
+
+STYLE EXAMPLES:
+
+❌ BAD: "Panel 1 shows a character. Panel 2 shows them walking."
+✅ GOOD: "Our hero enters the chamber, eyes widening... 'This changes everything,' they whisper."
+
+❌ BAD: "A tour shows new apartments for aliens only."
+✅ GOOD: "Gleaming towers rise above. Aliens only. Humans need not apply."
+
+DIALOGUE FORMAT:
+✅ "She freezes... 'This can't be real.'"
+❌ "She says 'This can't be real.'" (no pause before quote)
+
+OUTPUT FORMAT:
+Return ONLY raw JSON. No text before/after. No markdown blocks. Start with { and end with }:
+
+{
+  "page_narrative": "Brief engaging summary",
+  "panel_scores": [
+    {"panel_number": 1, "importance_score": 9, "reason": "Critical moment"}
+  ],
+  "narrative_segments": [
+    {
+      "segment_id": 1,
+      "text": "Dramatic narration here.",
+      "show_panels": [1, 3],
+      "duration_hint": "medium"
+    }
+  ],
+  "top_panels": [1, 3, 4]
+}
+
+REQUIREMENTS:
+- panel_scores: ALL panels with scores and reasons
+- narrative_segments: 1-3 segments, each 1-3 sentences
+- duration_hint: "fast" (action), "medium" (normal), "slow" (dramatic)
+- top_panels: panels scored 7+
+
+QUALITY CHECK:
+✓ Sounds good read aloud?
+✓ Emotional and engaging?
+✓ Story-focused, not description?
+✓ Concise (under 1 min)?
+✓ Factual to panels?
+✓ "..." only before quotes?
