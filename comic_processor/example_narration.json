@@ -1,0 +1,27 @@
+{
+  "panel_scores": {
+    "1": 7,
+    "2": 9,
+    "3": 6,
+    "4": 8
+  },
+  "narrative_segments": [
+    {
+      "segment_id": 1,
+      "text": "In the heart of the city, our hero stands alone. The wind carries whispers of an approaching storm.",
+      "show_panels": [1, 2]
+    },
+    {
+      "segment_id": 2,
+      "text": "A sudden revelation changes everything. There's no turning back now.",
+      "show_panels": [3]
+    },
+    {
+      "segment_id": 3,
+      "text": "With determination blazing in their eyes, they step forward into the unknown.",
+      "show_panels": [4]
+    }
+  ],
+  "top_panels": [2, 4, 1, 3],
+  "page_narrative": "A pivotal moment unfolds as our hero faces a life-changing decision in the midst of gathering chaos."
+}
