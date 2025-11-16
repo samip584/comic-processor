@@ -4,9 +4,7 @@ Professional narrative video generator for comics and manga. Extracts panels usi
 
 ## 🎥 Demo
 
-<video src="https://github.com/user-attachments/assets/your-username-repo/demo.mp4" controls></video>
-
-> **To make the video work:** After pushing to GitHub, drag and drop `static/demo.mp4` into any GitHub issue/comment, copy the generated URL, and replace the src above.
+https://github.com/user-attachments/assets/c234bf71-4c8c-4d54-8a1a-d4465b24ed09
 
 *Example output: AI-generated narrative video from comic panels with synchronized TTS narration*
 
@@ -15,6 +13,7 @@ Professional narrative video generator for comics and manga. Extracts panels usi
 Choose between two powerful text-to-speech engines:
 
 ### **IndexTTS2** (Local, Zero-shot Voice Cloning)
+
 - 🎙️ Zero-shot voice cloning from any reference audio
 - 🎭 Automatic emotional expression control
 - 🌍 Multi-language support (Chinese, English, mixed)
@@ -22,6 +21,7 @@ Choose between two powerful text-to-speech engines:
 - 💾 Runs locally, no API costs
 
 ### **Gemini TTS** (Cloud, Fast & Easy)
+
 - ☁️ Cloud-based, no model downloads needed
 - ⚡ Fast generation with pipelined processing
 - 🎵 High-quality narration voices (Enceladus, Puck, Charon, etc.)
@@ -33,6 +33,7 @@ You'll be prompted to choose your TTS engine when running the processor.
 ## 📁 Modular Architecture
 
 ### **Comic Processor** - `comic_processor/`
+
 - ✏️ **Editable Narration** - Save to JSON, edit, and regenerate
 - ♻️ **Regeneration Mode** - Skip AI analysis, use your edited JSON
 - 🧩 **Modular Design** - Separate panel extraction, audio generation, and video composition
@@ -64,11 +65,13 @@ pip install -r requirements.txt
 **Only needed if you want to use IndexTTS instead of Gemini TTS**
 
 **Automated Setup:**
+
 ```bash
 ./setup_indextts.sh
 ```
 
 **Manual Setup:**
+
 ```bash
 git clone https://github.com/index-tts/index-tts.git
 cd index-tts
@@ -92,6 +95,7 @@ Get a free Gemini API key at: https://makersuite.google.com/app/apikey
 
 **For Gemini TTS** (optional - enables TTS generation):
 The same Gemini API key also supports TTS. For higher rate limits, add multiple keys:
+
 ```bash
 GEMINI_API_KEYS=key1,key2,key3
 ```
@@ -114,6 +118,7 @@ GEMINI_API_KEYS=key1,key2,key3
 ### 1. Add Your Comics
 
 Place comic images in the `comic_pages/` folder:
+
 ```
 comic_pages/
   ├── page_001.png
@@ -224,6 +229,7 @@ The following features are planned for future releases:
 ### AI Narrative Prompts
 
 **Gemini**: Edit `prompt_narrative.txt` to customize:
+
 - Panel scoring criteria
 - Narrative style (dramatic, factual, etc.)
 - Output format
@@ -234,6 +240,7 @@ The following features are planned for future releases:
 ### Voice Customization (IndexTTS only)
 
 Add your voice samples to `voice_samples/`:
+
 ```bash
 voice_samples/
   ├── narrator.wav     # Your voice for cloning
@@ -242,6 +249,7 @@ voice_samples/
 ```
 
 **Voice Requirements:**
+
 - 3-10 seconds of clear speech
 - WAV format, 16kHz+ sample rate
 - Minimal background noise
@@ -252,6 +260,7 @@ voice_samples/
 ### Panel Extraction Tuning
 
 Edit `comic_processor/utils/panel_extractor.py`:
+
 ```python
 PanelExtractor(
     min_panel_pct=2.0,   # Minimum panel size (% of page)
@@ -262,6 +271,7 @@ PanelExtractor(
 ### Video Settings
 
 Edit `comic_processor/utils/video_generator.py`:
+
 ```python
 frame_rate = 30           # FPS
 frame_size = (1920, 1080) # Resolution
@@ -270,13 +280,15 @@ frame_size = (1920, 1080) # Resolution
 ## 🔍 Troubleshooting
 
 ### Panel Extraction Issues
+
 - **No panels detected**: Check `cache/extracted_panels/` to see detection results
 - **Wrong panels**: Adjust `min_panel_pct` and `max_panel_pct` in panel extractor
 - **Partial panels**: Ensure comic has clear gutters (white space) between panels
 - **Best results**: High-quality scans with distinct panel boundaries
 
 ### AI Analysis Errors
-- **Gemini API error**: 
+
+- **Gemini API error**:
   - Verify `.env` has valid `GEMINI_API_KEY`
   - Check quota at https://makersuite.google.com
   - Add multiple keys with `GEMINI_API_KEYS=key1,key2,key3`
@@ -286,6 +298,7 @@ frame_size = (1920, 1080) # Resolution
   - Check `OLLAMA_BASE_URL` in `.env` (default: `http://localhost:11434`)
 
 ### Audio/TTS Problems
+
 - **IndexTTS2 not found**: Run `./setup_indextts.sh` or manually install (only needed if using IndexTTS)
 - **Model loading fails**: Check `index-tts/checkpoints/` has all model files (~8GB)
 - **Voice cloning poor quality**: Use 5-10 second clear voice sample in `voice_samples/`
@@ -294,6 +307,7 @@ frame_size = (1920, 1080) # Resolution
 - **Audio generation slow**: First run downloads models; subsequent runs are faster
 
 ### Video Issues
+
 - **FFmpeg not found**: Install with `brew install ffmpeg` (macOS) or system package manager
 - **Video won't play**: Check codec support; try VLC media player
 - **Sync issues**: Check audio files in `results/{project}/audio/` are valid
@@ -301,12 +315,14 @@ frame_size = (1920, 1080) # Resolution
 ## 📋 Requirements
 
 ### Software
+
 - **Python**: 3.10 or higher
 - **Git**: With Git-LFS enabled (for model downloads)
 - **FFmpeg**: For video encoding
 - **Ollama** (optional): For local AI processing
 
 ### API Keys
+
 - **Gemini API** (free tier): https://makersuite.google.com/app/apikey
   - Used for AI analysis (required)
   - Also supports Gemini TTS (optional, alternative to IndexTTS)
@@ -314,6 +330,7 @@ frame_size = (1920, 1080) # Resolution
 - **OR Ollama** (no API key needed): https://ollama.ai
 
 ### Storage
+
 - **~8GB**: IndexTTS2 models (optional, only if using IndexTTS)
 - **~500MB**: Base dependencies
 - **Variable**: Cache and results (depends on usage)
@@ -358,24 +375,28 @@ comic-processor/
 ## 💡 Tips & Best Practices
 
 ### Comic Preparation
+
 - **Sequential naming**: `page_001.png`, `page_002.png`, etc.
 - **High quality**: 1200px+ width recommended for best panel detection
 - **Clear panels**: Comics with distinct gutters work best
 - **Formats**: PNG, JPG, JPEG supported
 
 ### Voice Cloning
+
 - **Quality sample**: 5-10 seconds of clear speech
 - **Natural delivery**: Read naturally, not overly dramatic
 - **Clean audio**: Minimal background noise
 - **Good mic**: Better input = better cloned voice
 
 ### Workflow Optimization
+
 - **Start small**: Process 1-2 pages first to test settings
 - **Use cache**: Panel extraction is cached; AI re-runs are fast
 - **Edit JSON**: Tweak narration without re-analyzing with AI
 - **Multiple voices**: Create different voice samples for variety
 
 ### Performance
+
 - **First run**: Slower (downloads models, generates cache)
 - **Subsequent runs**: Much faster (uses cache)
 - **Regenerate mode**: Fastest (skips AI analysis entirely)
@@ -395,6 +416,7 @@ MIT License - Free to use and modify
 ## 🆘 Support
 
 Having issues? Try these steps:
+
 1. ✅ Check the [Troubleshooting](#-troubleshooting) section
 2. 📁 Review `cache/` folder for analysis results
 3. 🧪 Test with a single page first
