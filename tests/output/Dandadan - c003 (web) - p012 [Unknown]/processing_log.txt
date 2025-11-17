@@ -1,0 +1,20 @@
+
+Processing Dandadan - c003 (web) - p012 [Unknown]...
+------------------------------------------------------------
+Image dimensions: 784x1145
+  ✓ Step 1: Original image saved
+  ✓ Step 2: Black mask saved (threshold=50)
+  ✓ Step 3: Connected components (2527 patches) saved
+  ✓ Step 4: Border edges (7 horizontal, 4 vertical) saved
+           - Green lines = horizontal edges
+           - Blue lines = vertical edges
+  ✓ Step 5: Merged edges (6 horizontal, 3 vertical)
+  ✓ Step 6: Detected panels (4 panels) saved
+           Panel 1: bbox=(44, 0, 739, 567)
+           Panel 2: bbox=(378, 586, 405, 240)
+           Panel 3: bbox=(44, 586, 325, 558)
+           Panel 4: bbox=(369, 846, 414, 298)
+  ✓ Step 7: Final numbered panels saved
+  ✅ All steps saved for Dandadan - c003 (web) - p012 [Unknown]
+
+Output directory: /Users/sampa/Code/College-Resume/comic-processor/tests/output/Dandadan - c003 (web) - p012 [Unknown]

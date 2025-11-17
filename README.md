@@ -6,7 +6,7 @@ Professional narrative video generator for comics and manga. Extracts panels usi
 
 https://github.com/user-attachments/assets/c234bf71-4c8c-4d54-8a1a-d4465b24ed09
 
-*Example output: AI-generated narrative video from comic panels with synchronized TTS narration*
+_Example output: AI-generated narrative video from comic panels with synchronized TTS narration_
 
 ## 🎙️ TTS Options
 
@@ -193,7 +193,7 @@ The following features are planned for future releases:
 
 ```
 1. Panel Extraction (Computer Vision)
-   ├─ Detect panel boundaries using gutter detection
+   ├─ Detect panel boundaries using edge detection
    ├─ Extract individual panels as images
    ├─ Sort in correct reading order (manga/comic aware)
    └─ Cache results for speed

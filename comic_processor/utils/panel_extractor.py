@@ -8,7 +8,7 @@ import numpy as np
 
 class PanelExtractor:
     """
-    Extracts comic panels using hybrid edge+grid detection.
+    Extracts comic panels using edge-based detection.
     Based on test_border_edges.py - proven to work best for manga/comics.
     
     Strategy:
@@ -16,8 +16,7 @@ class PanelExtractor:
     2. Extract 2-pixel border edges (leftmost, rightmost, topmost, bottommost)
     3. Merge collinear line segments within 30px tolerance
     4. Form rectangles from edge combinations (max 20% gap filling)
-    5. Create grid from detected edges (extended to borders)
-    6. Merge edge-based and grid-based results
+    5. Sort panels in reading order
     """
     
     def __init__(self, min_panel_pct: float = 10.0, max_panel_pct: float = 95.0):
@@ -32,11 +31,10 @@ class PanelExtractor:
         self.black_threshold = 50
         self.merge_tolerance = 30
         self.max_gap_pct = 0.20
-        self.edge_extension_tolerance = 50
     
     def extract_panels(self, image_path: Path, content_type: str = "comic") -> List[Dict]:
         """
-        Extract all panels from a comic page using hybrid edge+grid detection.
+        Extract all panels from a comic page using edge-based detection.
         
         Args:
             image_path: Path to comic page image
@@ -76,13 +74,7 @@ class PanelExtractor:
         connections = self._detect_right_angles(h_edges, v_edges)
         
         # Step 6: Form rectangles from edges
-        edge_panels = self._form_rectangles_from_edges(h_edges, v_edges, connections, width, height)
-        
-        # Step 7: Create grid-based detection
-        grid_panels = self._create_grid_panels(h_edges, v_edges, width, height)
-        
-        # Step 8: Merge edge and grid results
-        all_panels = self._merge_edge_and_grid_panels(edge_panels, grid_panels)
+        all_panels = self._form_rectangles_from_edges(h_edges, v_edges, connections, width, height)
         
         # Check if panels cover enough of the page (at least 80%)
         total_page_area = width * height
@@ -378,124 +370,6 @@ class PanelExtractor:
                 rectangles.append(rect)
         
         return rectangles
-    
-    def _create_grid_panels(self, h_edges: List, v_edges: List, width: int, height: int) -> List[Tuple]:
-        """Create grid-based detection by drawing edges and finding regions."""
-        grid = np.zeros((height, width), dtype=np.uint8)
-        
-        # Draw horizontal lines (extend to borders if close)
-        for h_y, h_x_start, h_x_end in h_edges:
-            extended_start = 0 if h_x_start < self.edge_extension_tolerance else h_x_start
-            extended_end = width - 1 if (width - h_x_end) < self.edge_extension_tolerance else h_x_end
-            cv2.line(grid, (extended_start, h_y), (extended_end, h_y), 255, 10)
-        
-        # Draw vertical lines (extend to borders if close)
-        for v_x, v_y_start, v_y_end in v_edges:
-            extended_start = 0 if v_y_start < self.edge_extension_tolerance else v_y_start
-            extended_end = height - 1 if (height - v_y_end) < self.edge_extension_tolerance else v_y_end
-            cv2.line(grid, (v_x, extended_start), (v_x, extended_end), 255, 10)
-        
-        # Invert grid to get panel regions
-        grid_inverted = cv2.bitwise_not(grid)
-        
-        # Find contours
-        contours, _ = cv2.findContours(grid_inverted, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
-        # DEBUG
-        #print(f"[DEBUG] Grid contours found: {len(contours)}")
-        
-        # Convert contours to rectangles
-        min_width = int(width * self.min_panel_width_pct)
-        min_height = int(height * self.min_panel_height_pct)
-        
-        rectangles = []
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            if w >= min_width and h >= min_height:
-                rectangles.append((x, y, x + w, y + h))
-        
-        return rectangles
-    
-    def _merge_edge_and_grid_panels(self, edge_panels: List[Tuple], 
-                                     grid_panels: List[Tuple]) -> List[Tuple]:
-        """Merge edge-based and grid-based results."""
-        combined = list(edge_panels)
-        
-        # Add grid panels that don't significantly overlap with edge panels
-        for grid_rect in grid_panels:
-            g_left, g_top, g_right, g_bottom = grid_rect
-            
-            overlaps = False
-            for edge_rect in edge_panels:
-                e_left, e_top, e_right, e_bottom = edge_rect
-                
-                # Calculate intersection
-                inter_left = max(g_left, e_left)
-                inter_top = max(g_top, e_top)
-                inter_right = min(g_right, e_right)
-                inter_bottom = min(g_bottom, e_bottom)
-                
-                if inter_right > inter_left and inter_bottom > inter_top:
-                    inter_area = (inter_right - inter_left) * (inter_bottom - inter_top)
-                    grid_area = (g_right - g_left) * (g_bottom - g_top)
-                    overlap_pct = inter_area / grid_area if grid_area > 0 else 0
-                    
-                    if overlap_pct > 0.5:  # 50% overlap = same panel
-                        overlaps = True
-                        break
-            
-            if not overlaps:
-                # Check doesn't overlap with other grid panels we've added
-                can_add = True
-                for existing in combined[len(edge_panels):]:
-                    ex_left, ex_top, ex_right, ex_bottom = existing
-                    if not (g_right <= ex_left or g_left >= ex_right or 
-                           g_bottom <= ex_top or g_top >= ex_bottom):
-                        can_add = False
-                        break
-                
-                if can_add:
-                    combined.append(grid_rect)
-        
-        # Remove container panels that encapsulate other panels
-        # (panels that contain almost all of other panels' area)
-        filtered = []
-        for i, panel_a in enumerate(combined):
-            a_left, a_top, a_right, a_bottom = panel_a
-            a_area = (a_right - a_left) * (a_bottom - a_top)
-            
-            is_container = False
-            contained_area = 0
-            
-            # Check if this panel contains other panels
-            for j, panel_b in enumerate(combined):
-                if i == j:
-                    continue
-                
-                b_left, b_top, b_right, b_bottom = panel_b
-                b_area = (b_right - b_left) * (b_bottom - b_top)
-                
-                # Check if panel_b is mostly inside panel_a
-                inter_left = max(a_left, b_left)
-                inter_top = max(a_top, b_top)
-                inter_right = min(a_right, b_right)
-                inter_bottom = min(a_bottom, b_bottom)
-                
-                if inter_right > inter_left and inter_bottom > inter_top:
-                    inter_area = (inter_right - inter_left) * (inter_bottom - inter_top)
-                    # If >80% of panel_b is inside panel_a, count it as contained
-                    if inter_area / b_area > 0.8:
-                        contained_area += b_area
-            
-            # If this panel contains other panels that make up >70% of its area,
-            # it's a container panel - remove it
-            if contained_area / a_area > 0.7:
-                is_container = True
-            
-            if not is_container:
-                filtered.append(panel_a)
-        
-        return filtered
     
     def _process_contour(self, contour, img: np.ndarray, img_area: int, 
                         current_panel_count: int) -> Dict:
